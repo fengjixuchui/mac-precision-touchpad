@@ -29,20 +29,14 @@ typedef struct _QUEUE_CONTEXT {
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(QUEUE_CONTEXT, QueueGetContext)
 
 NTSTATUS
-AmtPtpDeviceSpiKmQueueInitialize(
+AmtPtpDeviceUsbKmQueueInitialize(
     _In_ WDFDEVICE Device
-);
-
-_IRQL_requires_(PASSIVE_LEVEL)
-PCHAR
-DbgIoControlGetString(
-	_In_ ULONG IoControlCode
-);
+    );
 
 //
 // Events from the IoQueue object
 //
-EVT_WDF_IO_QUEUE_IO_INTERNAL_DEVICE_CONTROL AmtPtpDeviceSpiKmEvtIoInternalDeviceControl;
-EVT_WDF_IO_QUEUE_IO_STOP AmtPtpDeviceSpiKmEvtIoStop;
+EVT_WDF_IO_QUEUE_IO_DEVICE_CONTROL AmtPtpDeviceUsbKmEvtIoDeviceControl;
+EVT_WDF_IO_QUEUE_IO_STOP AmtPtpDeviceUsbKmEvtIoStop;
 
 EXTERN_C_END

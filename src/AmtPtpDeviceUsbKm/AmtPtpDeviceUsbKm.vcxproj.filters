@@ -17,9 +17,11 @@
       <UniqueIdentifier>{8E41214B-6785-4CFE-B992-037D68949A14}</UniqueIdentifier>
       <Extensions>inf;inv;inx;mof;mc;</Extensions>
     </Filter>
-    <Filter Include="Device Specific Metadata Files">
-      <UniqueIdentifier>{d3b4239b-c0e3-4d91-a6ee-730df7a15240}</UniqueIdentifier>
-    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Inf Include="AmtPtpDeviceUsbKm.inf">
+      <Filter>Driver Files</Filter>
+    </Inf>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h">
@@ -28,37 +30,16 @@
     <ClInclude Include="Driver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Trace.h">
+    <ClInclude Include="Public.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Queue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AppleDefinition.h">
+    <ClInclude Include="Trace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Hid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HidCommon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DeviceFamily\Wellspring7A.h">
-      <Filter>Device Specific Metadata Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DeviceFamily\WellspringMt2.h">
-      <Filter>Device Specific Metadata Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DeviceFamily\Wellspring8.h">
-      <Filter>Device Specific Metadata Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DeviceFamily\Wellspring5.h">
-      <Filter>Device Specific Metadata Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ModernTrace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -72,7 +53,10 @@
     <ClCompile Include="Queue.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InputInterrupt.c">
+    <ClCompile Include="Interrupt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugUtils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Hid.c">
@@ -83,15 +67,5 @@
     <ResourceCompile Include="Resource.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="AmtPtpDevice.wprp">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Inf Include="AmtPtpDeviceUsbUm.inf">
-      <Filter>Driver Files</Filter>
-    </Inf>
   </ItemGroup>
 </Project>

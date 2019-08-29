@@ -16,16 +16,16 @@ Environment:
 
 #include <ntddk.h>
 #include <wdf.h>
+#include <usb.h>
+#include <usbdlib.h>
+#include <wdfusb.h>
 #include <initguid.h>
-#include <hidport.h>
 
 #include "device.h"
 #include "queue.h"
 #include "trace.h"
 
-#include "AppleDefinition.h"
-#include "Hid.h"
-#include "Input.h"
+#include <Hid.h>
 
 EXTERN_C_START
 
@@ -34,17 +34,7 @@ EXTERN_C_START
 //
 
 DRIVER_INITIALIZE DriverEntry;
-EVT_WDF_DRIVER_DEVICE_ADD AmtPtpDeviceSpiKmEvtDeviceAdd;
-EVT_WDF_OBJECT_CONTEXT_CLEANUP AmtPtpDeviceSpiKmEvtDriverContextCleanup;
-
-//
-// Pool Tag
-//
-#define PTP_LIST_POOL_TAG 'LTPA'
-
-//
-// State Switch Max Retries
-//
-#define STATE_SWITCH_MAX_RETRIES 5
+EVT_WDF_DRIVER_DEVICE_ADD AmtPtpDeviceUsbKmEvtDeviceAdd;
+EVT_WDF_OBJECT_CONTEXT_CLEANUP AmtPtpDeviceUsbKmEvtDriverContextCleanup;
 
 EXTERN_C_END

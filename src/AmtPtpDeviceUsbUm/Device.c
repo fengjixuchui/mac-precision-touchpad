@@ -117,7 +117,6 @@ AmtPtpCreateDevice(
 	return status;
 }
 
-_IRQL_requires_(PASSIVE_LEVEL)
 NTSTATUS
 AmtPtpEvtDevicePrepareHardware(
 	_In_ WDFDEVICE Device,
@@ -189,61 +188,6 @@ AmtPtpEvtDevicePrepareHardware(
 			);
 			return status;
 		}
-
-		// Set fuzz information
-		pDeviceContext->HorizonalFuzz = pDeviceContext->DeviceInfo->x.snratio ?
-			(pDeviceContext->DeviceInfo->x.max - pDeviceContext->DeviceInfo->x.min) / pDeviceContext->DeviceInfo->x.snratio :
-			0.0;
-
-		pDeviceContext->VerticalFuzz = pDeviceContext->DeviceInfo->y.snratio ?
-			(pDeviceContext->DeviceInfo->y.max - pDeviceContext->DeviceInfo->y.min) / pDeviceContext->DeviceInfo->y.snratio :
-			0.0;
-
-		pDeviceContext->PressureFuzz = pDeviceContext->DeviceInfo->p.snratio ?
-			(pDeviceContext->DeviceInfo->p.max - pDeviceContext->DeviceInfo->p.min) / pDeviceContext->DeviceInfo->p.snratio :
-			0.0;
-
-		pDeviceContext->WidthFuzz = pDeviceContext->DeviceInfo->w.snratio ?
-			(pDeviceContext->DeviceInfo->w.max - pDeviceContext->DeviceInfo->w.min) / pDeviceContext->DeviceInfo->w.snratio :
-			0.0;
-
-		pDeviceContext->OrientationFuzz = pDeviceContext->DeviceInfo->o.snratio ?
-			(pDeviceContext->DeviceInfo->o.max - pDeviceContext->DeviceInfo->o.min) / pDeviceContext->DeviceInfo->o.snratio :
-			0.0;
-
-		pDeviceContext->SgContactSizeQualLevel = SIZE_QUALIFICATION_THRESHOLD;
-		pDeviceContext->MuContactSizeQualLevel = SIZE_MU_LOWER_THRESHOLD;
-		pDeviceContext->PressureQualLevel = PRESSURE_QUALIFICATION_THRESHOLD;
-
-		pDeviceContext->TouchStateMachineInfo.HorizonalFuzz		= pDeviceContext->HorizonalFuzz;
-		pDeviceContext->TouchStateMachineInfo.VerticalFuzz		= pDeviceContext->VerticalFuzz;
-		pDeviceContext->TouchStateMachineInfo.WidthFuzz			= pDeviceContext->WidthFuzz;
-		pDeviceContext->TouchStateMachineInfo.OrientationFuzz	= pDeviceContext->OrientationFuzz;
-		pDeviceContext->TouchStateMachineInfo.PressureFuzz		= pDeviceContext->PressureFuzz;
-
-		status = SmResetState(&pDeviceContext->TouchStateMachineInfo);
-		if (!NT_SUCCESS(status)) {
-
-			TraceEvents(
-				TRACE_LEVEL_ERROR,
-				TRACE_DEVICE,
-				"%!FUNC! SmResetState failed with %!STATUS!",
-				status
-			);
-			return status;
-
-		}
-
-		TraceEvents(
-			TRACE_LEVEL_INFORMATION, 
-			TRACE_DEVICE, 
-			"%!FUNC! fuzz information: h = %f, v = %f, p = %f, w = %f, o = %f", 
-			pDeviceContext->HorizonalFuzz,
-			pDeviceContext->VerticalFuzz,
-			pDeviceContext->PressureFuzz,
-			pDeviceContext->WidthFuzz,
-			pDeviceContext->OrientationFuzz
-		);
 	}
 
 	//
@@ -340,7 +284,7 @@ AmtPtpGetWellspringMode(
 	status = WdfMemoryCreate(
 		WDF_NO_OBJECT_ATTRIBUTES,
 		PagedPool,
-		0,
+		POOL_TAG_PTP_CONTROL,
 		DeviceContext->DeviceInfo->um_size,
 		&bufHandle,
 		&buffer
@@ -407,7 +351,7 @@ cleanup:
 		"%!FUNC! Exit"
 	);
 
-	bufHandle = NULL;
+	WdfObjectDelete(bufHandle);
 	return status;
 
 }
@@ -443,7 +387,7 @@ AmtPtpSetWellspringMode(
 	status = WdfMemoryCreate(
 		WDF_NO_OBJECT_ATTRIBUTES, 
 		PagedPool, 
-		0, 
+		POOL_TAG_PTP_CONTROL, 
 		DeviceContext->DeviceInfo->um_size, 
 		&bufHandle, 
 		&buffer
@@ -546,13 +490,11 @@ cleanup:
 		"%!FUNC! Exit"
 	);
 
-	bufHandle = NULL;
+	WdfObjectDelete(bufHandle);
 	return status;
 
 }
 
-// D0 Entry & Exit
-_IRQL_requires_(PASSIVE_LEVEL)
 NTSTATUS
 AmtPtpEvtDeviceD0Entry(
 	_In_ WDFDEVICE Device,
@@ -642,7 +584,6 @@ End:
 	return status;
 }
 
-_IRQL_requires_(PASSIVE_LEVEL)
 NTSTATUS
 AmtPtpEvtDeviceD0Exit(
 	_In_ WDFDEVICE Device,
