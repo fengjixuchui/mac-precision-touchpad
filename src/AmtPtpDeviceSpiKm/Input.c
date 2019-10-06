@@ -14,8 +14,19 @@ AmtPtpSpiInputRoutineWorker(
 	WDFREQUEST SpiHidReadRequest;
 	WDFMEMORY SpiHidReadOutputMemory;
 	PWORKER_REQUEST_CONTEXT RequestContext;
-
 	pDeviceContext = DeviceGetContext(Device);
+
+	// This call is expected to happen after D0 entrance
+	if (pDeviceContext->DeviceStatus == D3) {
+		TraceEvents(
+			TRACE_LEVEL_WARNING,
+			TRACE_QUEUE,
+			"%!FUNC! Unexpected call while device is in D3 status"
+		);
+
+		WdfRequestComplete(PtpRequest, STATUS_DEVICE_NOT_READY);
+		return;
+	}
 
 	Status = WdfRequestForwardToIoQueue(
 		PtpRequest,
@@ -32,6 +43,33 @@ AmtPtpSpiInputRoutineWorker(
 
 		WdfRequestComplete(PtpRequest, Status);
 		return;
+	}
+
+	// Late-init for the sleep workaround
+	if (pDeviceContext->DeviceStatus == D0ActiveAndUnconfigured) {
+		TraceEvents(
+			TRACE_LEVEL_INFORMATION,
+			TRACE_DRIVER,
+			"%!FUNC! Re-initialize device for sleep workaround"
+		);
+
+		Status = AmtPtpSpiSetState(
+			Device,
+			TRUE
+		);
+
+		if (!NT_SUCCESS(Status))
+		{
+			TraceEvents(
+				TRACE_LEVEL_ERROR,
+				TRACE_DRIVER,
+				"%!FUNC! AmtPtpSpiSetState failed with %!STATUS!. Ignored anyway.",
+				Status
+			);
+		}
+		else {
+			pDeviceContext->DeviceStatus = D0ActiveAndConfigured;
+		}
 	}
 
 	WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&Attributes, WORKER_REQUEST_CONTEXT);
@@ -52,7 +90,6 @@ AmtPtpSpiInputRoutineWorker(
 			Status
 		);
 
-		WdfRequestComplete(PtpRequest, Status);
 		return;
 	}
 
@@ -71,7 +108,6 @@ AmtPtpSpiInputRoutineWorker(
 		);
 
 		WdfObjectDelete(SpiHidReadRequest);
-		WdfRequestComplete(PtpRequest, Status);
 		return;
 	}
 
@@ -100,9 +136,8 @@ AmtPtpSpiInputRoutineWorker(
 			Status
 		);
 
-		WdfObjectDelete(SpiHidReadRequest);
 		WdfObjectDelete(SpiHidReadOutputMemory);
-		WdfRequestComplete(PtpRequest, Status);
+		WdfObjectDelete(SpiHidReadRequest);
 		return;
 	}
 
@@ -126,9 +161,8 @@ AmtPtpSpiInputRoutineWorker(
 			"%!FUNC! AmtPtpSpiInputRoutineWorker request failed to sent"
 		);
 
-		WdfObjectDelete(SpiHidReadRequest);
 		WdfObjectDelete(SpiHidReadOutputMemory);
-		WdfRequestComplete(PtpRequest, STATUS_IO_DEVICE_ERROR);
+		WdfObjectDelete(SpiHidReadRequest);
 	}
 }
 
@@ -161,7 +195,8 @@ AmtPtpRequestCompletionRoutine(
 	RequestContext = (PWORKER_REQUEST_CONTEXT) Context;
 	pDeviceContext = RequestContext->DeviceContext;
 
-	// Read report and fulfill PTP request (we must have one by design)
+	// Read report and fulfill PTP request.
+	// If no report is found, just exit.
 	Status = WdfIoQueueRetrieveNextRequest(pDeviceContext->HidQueue, &PtpRequest);
 	if (!NT_SUCCESS(Status)) {
 		TraceEvents(
@@ -176,6 +211,18 @@ AmtPtpRequestCompletionRoutine(
 
 	SpiRequestLength = (LONG) WdfRequestGetInformation(SpiRequest);
 	pSpiTrackpadPacket = (PSPI_TRACKPAD_PACKET) WdfMemoryGetBuffer(Params->Parameters.Ioctl.Output.Buffer, NULL);
+
+	// Safe measurement for buffer overrun
+	if (SpiRequestLength < 46) {
+		TraceEvents(
+			TRACE_LEVEL_ERROR,
+			TRACE_DRIVER,
+			"%!FUNC! Input too small: %d < 46",
+			SpiRequestLength
+		);
+		Status = STATUS_DEVICE_DATA_ERROR;
+		goto exit;
+	}
 
 	// Get Counter
 	KeQueryPerformanceCounter(
