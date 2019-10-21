@@ -2,7 +2,13 @@
 
 [![Build Status](https://ligstd.visualstudio.com/_apis/public/build/definitions/7694e0d0-94e3-4fd2-b39a-ecd261e1ba2e/22/badge)](https://ligstd.visualstudio.com/Apple%20PTP%20Trackpad/_build?definitionId=22)
 
-This project implements Windows Precision Touchpad Protocol for Apple MacBook family/Magic Trackpad 2 on Windows 10. Both USB and SPI trackpads are supported.
+This project implements Windows Precision Touchpad Protocol for Apple MacBook family/Magic Trackpad 2 on Windows 10. Both USB (traditional and T2) and SPI trackpads are supported.
+
+If you like my work, please consider buying me a coffee. Thank you for your support!
+
+<a href="https://www.buymeacoffee.com/imbushuo" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+
+Or [PayPal](https://www.paypal.com/paypalme/imbushuo)
 
 ## Future Plans and feature tracking
 
@@ -12,50 +18,20 @@ Use the [Azure DevOps Board](https://ligstd.visualstudio.com/Apple%20PTP%20Track
 
 [![Watch the video](https://img.youtube.com/vi/-GWlfw7omdo/hqdefault.jpg)](https://youtu.be/-GWlfw7omdo)
 
-## T2 devices
+## Converged Installation Guide
 
-I got my T2 MacBook Pro :) Work is in progress. Eventually all USB devices will use the km driver (not only T2).
-
-If you like my work, please consider buying me a coffee. Thank you for your support!
-
-<a href="https://www.buymeacoffee.com/imbushuo" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
-
-Or [PayPal](https://www.paypal.com/paypalme/imbushuo)
-
-## A better installation guide
-
-https://www.reddit.com/r/bootcamp/comments/c4alv2/how_to_install_mac_precision_touchpad_better_than/ - thank you Azmat
-
-**Note: it is unnecessary to enable test signing, or install the certificate manually. Doing so may cause problems in installation. See [this issue](https://github.com/imbushuo/mac-precision-touchpad/issues/228#issuecomment-538689587) for detailed explanation.**
-
-## USB-based model Installation
-
+0. **Disable Secure Boot if your MacBook comes with Apple T2 Security chip**: Boot with Command + R, select Startup Security Tools and disable Secure Boot (No Boot Security)
 1. Go to the release tab in Github and download the newest version
-2. Open the zip and navigate to `Drivers\x64\ReleaseSigned`
-3. Go to `AmtPtpDevice` directory
+2. Open the zip and navigate to `x64\ReleaseSigned`
+3. Go to `AmtPtpDeviceUniversalPkg` directory
 4. Right click `AmtPtpDevice.inf` and install it
 5. Confirm driver publisher
 
-## SPI-based model Installation
-
-1. Go to the release tab in Github and download the newest version
-2. Open the zip and navigate to `Drivers\x64\ReleaseSigned`
-3. Go to `AmtPtpDeviceSpiKm` directory
-4. Right click `AmtPtpDeviceSpiKm.inf` and install it
-5. Confirm driver publisher
-
-## Apple T2-based model Installation
-
-0. **Disable Secure Boot as temporary mitigation**: Boot with Command + R, select Startup Security Tools and disable Secure Boot (No Boot Security)
-1. Go to the release tab in Github and download the newest version
-2. Open the zip and navigate to `Drivers\x64\ReleaseSigned`
-3. Go to `AmtPtpDeviceUsbKm` directory
-4. Right click `AmtPtpDeviceUsbKm.inf` and install it
-5. Confirm driver publisher
+**Note: it is unnecessary to enable test signing, or install the certificate manually. Doing so may cause problems in installation. See [this issue](https://github.com/imbushuo/mac-precision-touchpad/issues/228#issuecomment-538689587) for detailed explanation.**
 
 ## For developers
 
-- SPI version is kernel-mode driver, using KMDF Framework v1.23. Windows 10 Driver Development Kit Version 1803 is required for development and testing.
+- SPI/T2 version is kernel-mode driver, using KMDF Framework v1.23. Windows 10 Driver Development Kit Version 1803 is required for development and testing.
 - USB version is a user-mode driver, using UMDF Framework v2.15. Windows 10 Driver Development Kit Version 1803 is required for development and testing.
 
 **Note: I plan to target a higher version of KMDF and drop UMDF later this year.**
@@ -71,8 +47,8 @@ There is a bring-up issue for certain MacBook Pro and MacBook Air. I am looking 
 - [x] Apple Magic Trackpad 2 (Not stable)
 - [x] MacBook Pro with Retina Display (2013, 2014, 2015, 13-inch & 15-inch)
 - [x] New MacBook (12-inch)
-- [x] MacBook Pro 2015, 2016, 2017
-- [ ] _(Work in progress)_ T2-based devices: MacBook Air 2018, MacBook Pro 2017/2018/2019: a few is supported as of now
+- [x] MacBook Pro 2015, 2016, 2017 (a few SPI devices are in work-in-progress state)
+- [x] T2-based devices: MacBook Air 2018, MacBook Pro 2017/2018/2019: Use default fallback, experience might not be optimal. Open a issue if you encountered dead touch regions.
 
 ## Roadmap
 
