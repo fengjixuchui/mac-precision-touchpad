@@ -22,44 +22,53 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Device.h">
+    <ClInclude Include="include\AppleDefinition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Driver.h">
+    <ClInclude Include="include\Device.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Trace.h">
+    <ClInclude Include="include\Driver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Queue.h">
+    <ClInclude Include="include\Hid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AppleDefinition.h">
+    <ClInclude Include="include\HidCommon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="include\ModernTrace.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Hid.h">
+    <ClInclude Include="include\Queue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HidCommon.h">
+    <ClInclude Include="include\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceFamily\Wellspring7A.h">
+    <ClInclude Include="include\Trace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\StaticHidRegistry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DeviceFamily\Wellspring3.h">
       <Filter>Device Specific Metadata Files</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceFamily\WellspringMt2.h">
+    <ClInclude Include="include\DeviceFamily\Wellspring5.h">
       <Filter>Device Specific Metadata Files</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceFamily\Wellspring8.h">
+    <ClInclude Include="include\DeviceFamily\Wellspring6.h">
       <Filter>Device Specific Metadata Files</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceFamily\Wellspring5.h">
+    <ClInclude Include="include\DeviceFamily\Wellspring7A.h">
       <Filter>Device Specific Metadata Files</Filter>
     </ClInclude>
-    <ClInclude Include="ModernTrace.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\DeviceFamily\Wellspring8.h">
+      <Filter>Device Specific Metadata Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DeviceFamily\WellspringMt2.h">
+      <Filter>Device Specific Metadata Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

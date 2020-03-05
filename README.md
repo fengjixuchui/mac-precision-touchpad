@@ -20,21 +20,15 @@ Use the [Azure DevOps Board](https://ligstd.visualstudio.com/Apple%20PTP%20Track
 
 ## Converged Installation Guide
 
-0. **Disable Secure Boot if your MacBook comes with Apple T2 Security chip**: Boot with Command + R, select Startup Security Tools and disable Secure Boot (No Boot Security)
-1. Go to the release tab in Github and download the newest version
-2. Open the zip and navigate to `x64\ReleaseSigned`
-3. Go to `AmtPtpDeviceUniversalPkg` directory
-4. Right click `AmtPtpDevice.inf` and install it
-5. Confirm driver publisher
+1. Go to the release tab in Github and download the newest version for your architecture
+2. Right click `AmtPtpDevice.inf` and install it
 
 **Note: it is unnecessary to enable test signing, or install the certificate manually. Doing so may cause problems in installation. See [this issue](https://github.com/imbushuo/mac-precision-touchpad/issues/228#issuecomment-538689587) for detailed explanation.**
 
 ## For developers
 
-- SPI/T2 version is kernel-mode driver, using KMDF Framework v1.23. Windows 10 Driver Development Kit Version 1803 is required for development and testing.
-- USB version is a user-mode driver, using UMDF Framework v2.15. Windows 10 Driver Development Kit Version 1803 is required for development and testing.
-
-**Note: I plan to target a higher version of KMDF and drop UMDF later this year.**
+- SPI/T2 version is kernel-mode driver, using KMDF Framework v1.23. Windows 10 Driver Development Kit Version 1903 is required for development and testing.
+- USB version is a user-mode driver, using UMDF Framework v2.15. Windows 10 Driver Development Kit Version 1903 is required for development and testing.
 
 ## Device support
 
@@ -44,11 +38,12 @@ There is a bring-up issue for certain MacBook Pro and MacBook Air. I am looking 
 - [x] Some non-Retina MacBook Pro (2011 and 2012)
 - [x] MacBook Pro with Retina Display (MacBookPro 10,1, MacBookPro10,2 & MacBookPro11,1)
 - [x] All recent MacBook Air (Please report if your model is not supported)
-- [x] Apple Magic Trackpad 2 (Not stable)
 - [x] MacBook Pro with Retina Display (2013, 2014, 2015, 13-inch & 15-inch)
 - [x] New MacBook (12-inch)
 - [x] MacBook Pro 2015, 2016, 2017 (a few SPI devices are in work-in-progress state)
 - [x] T2-based devices: MacBook Air 2018, MacBook Pro 2017/2018/2019: Use default fallback, experience might not be optimal. Open a issue if you encountered dead touch regions.
+- [ ] Magic Trackpad 2 (USB)
+- [ ] Magic Trackpad 2 ( Bluetooth connection)
 
 ## Roadmap
 
@@ -63,6 +58,9 @@ There is a bring-up issue for certain MacBook Pro and MacBook Air. I am looking 
 - [x] More Models (I need donation)
 - [x] SPI
 - [x] KM Driver cross-cert
+- [ ] Bluetooth
+- [ ] Defuzz
+- [ ] Input sensitivity configuration
 
 ## Acknowledgements
 
