@@ -64,15 +64,11 @@
     <RootNamespace>AmtPtpDeviceUsbKm</RootNamespace>
   </PropertyGroup>
   <!-- They told me this: https://help.github.com/en/articles/software-in-virtual-environments-for-github-actions#windows-server-2019 -->
-  <!-- We are still using 17134/rs4 WDK on dev and AzDevOps environment. -->
   <PropertyGroup>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(BuildEnvironment)'=='Github'">
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(BuildEnvironment)'=='AzurePipelineOnPremAgent'">
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
@@ -191,9 +187,6 @@
     <OutDir>$(SolutionDir)build\$(ProjectName)\$(Platform)\$(ConfigurationName)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\$(ProjectName)\$(Platform)\$(ConfigurationName)\</IntDir>
     <IncludePath>$(SolutionDir)intermediate\$(ProjectName)\$(Platform)\$(ConfigurationName)\;$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <TimeStampServer>http://timestamp.digicert.com</TimeStampServer>
-    <ProductionCertificate>$(ProductionCertPath)</ProductionCertificate>
-    <SignMode>ProductionSign</SignMode>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
@@ -213,9 +206,6 @@
     <OutDir>$(SolutionDir)build\$(ProjectName)\$(Platform)\$(ConfigurationName)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\$(ProjectName)\$(Platform)\$(ConfigurationName)\</IntDir>
     <IncludePath>$(SolutionDir)intermediate\$(ProjectName)\$(Platform)\$(ConfigurationName)\;$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <TimeStampServer>http://timestamp.digicert.com</TimeStampServer>
-    <ProductionCertificate>$(ProductionCertPath)</ProductionCertificate>
-    <SignMode>ProductionSign</SignMode>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
@@ -235,9 +225,13 @@
     <OutDir>$(SolutionDir)build\$(ProjectName)\$(Platform)\$(ConfigurationName)\</OutDir>
     <IntDir>$(SolutionDir)intermediate\$(ProjectName)\$(Platform)\$(ConfigurationName)\</IntDir>
     <IncludePath>$(SolutionDir)intermediate\$(ProjectName)\$(Platform)\$(ConfigurationName)\;$(ProjectDir)include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <!-- For release signed config on Azure pipeline, CI pipeline don't sign it. We do that locally -->
+  <PropertyGroup  Condition="'$(Configuration)'=='ReleaseSigned'">
     <TimeStampServer>http://timestamp.digicert.com</TimeStampServer>
     <ProductionCertificate>$(ProductionCertPath)</ProductionCertificate>
-    <SignMode>ProductionSign</SignMode>
+    <SignMode Condition="'$(BuildEnvironment)'!='AzurePipeline'">ProductionSign</SignMode>
+    <SignMode Condition="'$(BuildEnvironment)'=='AzurePipeline'">Off</SignMode>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

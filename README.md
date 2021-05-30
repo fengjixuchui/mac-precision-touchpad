@@ -4,12 +4,6 @@
 
 This project implements Windows Precision Touchpad Protocol for Apple MacBook family/Magic Trackpad 2 on Windows 10. Both USB (traditional and T2) and SPI trackpads are supported.
 
-If you like my work, please consider buying me a coffee. Thank you for your support!
-
-<a href="https://www.buymeacoffee.com/imbushuo" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
-
-Or [PayPal](https://www.paypal.com/paypalme/imbushuo)
-
 ## Future Plans and feature tracking
 
 Use the [Azure DevOps Board](https://ligstd.visualstudio.com/Apple%20PTP%20Trackpad/_workitems/) to track feature and device support plans. Bug reports should go to Github issues.
@@ -20,17 +14,28 @@ Use the [Azure DevOps Board](https://ligstd.visualstudio.com/Apple%20PTP%20Track
 
 ## Converged Installation Guide
 
+**IMPORTANT:** Given changes in Microsoft driver code signing policy, and the compliance need of EV certificate, CI auto builds beyond 2021/01/06 04:00AM EST will not be automatically signed with normal code signing certificate. These builds are still supposed via TestSigning, but not recommended for normal users. Proper WHQL and EV dual-signed packages will be released manually, which can be downloaded from the release page.
+
+0. Make sure you uninstalled `Trackpad++` completely if you have previously does so
 1. Go to the release tab in Github and download the newest version for your architecture
 2. Right click `AmtPtpDevice.inf` and install it
 
 **Note: it is unnecessary to enable test signing, or install the certificate manually. Doing so may cause problems in installation. See [this issue](https://github.com/imbushuo/mac-precision-touchpad/issues/228#issuecomment-538689587) for detailed explanation.**
 
-## Also Uninstallation
+## Also Uninstallation (extremely important for reinstallation `Trackpad++` and such)
 
 1. Go to device manager
 2. Find the "Apple Precision Touch Device"
 3. Right click "remove the device" and also check "uninstall driver"
 4. Rescan devices
+
+## Installation with Chocolatey
+
+The drivers are available as a [Chocolatey package](https://chocolatey.org/packages/mac-precision-touchpad/). To install using [Chocolatey](https://chocolatey.org) run:
+
+```
+choco install mac-precision-touchpad
+```
 
 ## For developers
 
@@ -48,9 +53,9 @@ There is a bring-up issue for certain MacBook Pro and MacBook Air. I am looking 
 - [x] MacBook Pro with Retina Display (2013, 2014, 2015, 13-inch & 15-inch)
 - [x] New MacBook (12-inch)
 - [x] MacBook Pro 2015, 2016, 2017 (a few SPI devices are in work-in-progress state)
-- [x] T2-based devices: MacBook Air 2018, MacBook Pro 2017/2018/2019: Use default fallback, experience might not be optimal. Open a issue if you encountered dead touch regions.
-- [ ] Magic Trackpad 2 (USB)
-- [ ] Magic Trackpad 2 ( Bluetooth connection)
+- [x] T2-based devices: MacBook Air 2018, MacBook Pro 2017/2018/2019/2020: Use default fallback, experience might not be optimal. Open a issue if you encountered dead touch regions.
+- [x] Magic Trackpad 2 (USB)
+- [ ] Magic Trackpad 2 (Bluetooth connection)
 
 ## Roadmap
 
@@ -70,6 +75,8 @@ There is a bring-up issue for certain MacBook Pro and MacBook Air. I am looking 
 - [ ] Input sensitivity configuration
 
 ## Acknowledgements
+
+**UPDATE 2021/05**: She got a M1 Mac now.
 
 People familiar with me know that I don't use Apple MacBook (so development work of this driver occurs on a Surface Pro 4). People probably think it doesn't make sense that I started this project. The motivation behind this project origin from complaints from my girlfriend. Hearing about frequent complains about Dell XPS 13's touchpad (though it passed Precision Touchpad certification), I decided to start this project, so by the time she switches to MacBook Pro, she will have excellent touchpad experience out-of-box, even on Windows. This driver is made for you, but also for everyone.
 
